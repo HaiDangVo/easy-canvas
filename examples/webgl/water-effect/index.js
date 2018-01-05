@@ -35,7 +35,7 @@ var fx = `
 		reflectCoord.x = texCoord.x + cos(phi) * 0.04 - 0.03;
 		reflectCoord.y = texCoord.y + sin(phi) * 0.02 - 0.01;
 		gl_FragColor = texture2D(fTexture, reflectCoord);
-		gl_FragColor += fogColor * 0.5 - 0.5;
+		gl_FragColor += fogColor * 0.25 - 0.25;
 		// gl_FragColor = vec4(sin(delta), 0.0, 0.0, 1.0);
 	}
 `;
