@@ -26,7 +26,7 @@ var fx = `
 
     void main() {
         gl_FragColor = vec4(vPos, 0.0, 1.0);
-        float width = 20.0 * pixel;20.0 * pixel;
+        float width = 20.0 * pixel;
         float cw = 0.08;
         // if (vPos.x - vPos.y < width && vPos.x - vPos.y > 0.0) {
         //     gl_FragColor = vec4(1.0);
@@ -70,8 +70,8 @@ var fx = `
         // O (x:65-75, y:40-60)
         float cx = 0.7;
         float cy = 0.5;
-        float t = distance(vec2(vPos.x * 1.5, vPos.y), vec2(cx * 1.5, cy));
-        if (is(t, cw, width)) {
+        float t = distance(vec2(vPos.x * 2.0, vPos.y), vec2(cx * 2.0, cy));
+        if (is(t, cw + width / 1.5, width * 1.5)) {
             gl_FragColor = vec4(1.0);
         }
     }
