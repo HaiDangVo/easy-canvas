@@ -24,47 +24,51 @@ var fx = `
         return p - f > 0.0 && p - f < w;
     }
 
+    void fill() {
+        gl_FragColor = vec4(vPos * cos(delta * 0.1) + 0.4, 0.0, 1.0);
+    }
+
     void main() {
-        gl_FragColor = vec4(vPos, 0.0, 1.0);
+        gl_FragColor = vec4(vec3(0.0), 1.0);
         float width = 20.0 * pixel;
         float cw = 0.08;
         // if (vPos.x - vPos.y < width && vPos.x - vPos.y > 0.0) {
-        //     gl_FragColor = vec4(1.0);
+        //     fill();
         // }
         // hello world
         // H (x:25-35, y:40-60)
         if (is(vPos.x, 0.25, width) || is(vPos.x, 0.25 + cw - width, width)) {
             if (is(vPos.y, 0.4, 0.2)) {
-                gl_FragColor = vec4(1.0);
+                fill();
             }
         }
         if (is(vPos.x, 0.25, cw) && is(vPos.y, 0.5 - width, width * 2.0)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         
         // E (x:35-45, y:40-60)
         if (is(vPos.x, 0.35, width) && is(vPos.y, 0.4, 0.2)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         if (is(vPos.x, 0.35, cw) && 
         (is(vPos.y, 0.4, width) || is(vPos.y, 0.5 - width, width * 2.0) || is(vPos.y, 0.6 - width, width))) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         
         // L (x:45-55, y:40-60)
         if (is(vPos.x, 0.45, width) && is(vPos.y, 0.4, 0.2)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         if (is(vPos.x, 0.45, cw) && is(vPos.y, 0.4, width)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
 
         // L (x:55-65, y:40-60)
         if (is(vPos.x, 0.55, width) && is(vPos.y, 0.4, 0.2)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         if (is(vPos.x, 0.55, cw) && is(vPos.y, 0.4, width)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
         
         // O (x:65-75, y:40-60)
@@ -72,7 +76,7 @@ var fx = `
         float cy = 0.5;
         float t = distance(vec2(vPos.x * 2.0, vPos.y), vec2(cx * 2.0, cy));
         if (is(t, cw + width / 1.5, width * 1.5)) {
-            gl_FragColor = vec4(1.0);
+            fill();
         }
     }
 `;
