@@ -176,7 +176,7 @@ window.onload = function () {
 				}
 				this.velocity.direction += this.gravity.force * delta;
 				this.first = Math.max(0, this.first - delta);
-				if (Math.random() > 0.996 && this.velocity.length > 10) {
+				if ((Math.random() < 0.004 * delta) && (this.velocity.length > 10)) {
 					let count = ~~(Math.random() * config.perParticles + 2);
 					[...new Array(count)].forEach(() => {
 						particles.push(particle({
