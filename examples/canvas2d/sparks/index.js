@@ -198,6 +198,7 @@ window.onload = function () {
 			render(ctx, delta) {
 				let w = config.sparkWidth * this.thickness * this.velocity.length * delta;
 				let h = config.sparkWidth * this.thickness * this.lifespan * 1.45 / 80;
+				config.isSlowMotion && (h *= config.hz * 2 / config.minHz);
 				w = Math.max(w, h);
 				ctx.translate(this.x, this.y);
 				ctx.rotate(this.rotation);
