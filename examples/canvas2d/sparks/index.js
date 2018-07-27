@@ -7,10 +7,10 @@ var config = {
 	clearColor: '#000000',
 	gearColor: '#333333',
 	gearRadius: 150,
-	sparkColor: ['rgba(225, 242, 24, 0.9)', 'rgba(240, 222, 24, 0.35)', 'rgba(245, 186, 48, 0.2)', 'rgba(255, 112, 64, 0.1)', 'rgba(255, 96, 96, 0)'],
+	sparkColor: ['rgba(215, 124, 24, 0.9)', 'rgba(220, 122, 24, 0.35)', 'rgba(225, 116, 48, 0.2)', 'rgba(235, 112, 64, 0.1)', 'rgba(255, 96, 96, 0)'],
 	sparkWidth: 6,
-	maxParticles: 300,
-	perParticles: 4,
+	maxParticles: 500,
+	perParticles: 6,
 	hz: 1000 / 30,
 	maxHz: 1000 / 30,
 	minHz: 1000 / 5,
@@ -182,15 +182,15 @@ window.onload = function () {
 				}
 				this.velocity.direction += this.gravity.force * delta;
 				this.first = Math.max(0, this.first - delta);
-				if ((Math.random() < 0.004 * delta) && (this.velocity.length > 10)) {
+				if ((Math.random() < 0.005 * delta) && (this.velocity.length > 10)) {
 					let count = ~~(Math.random() * config.perParticles + 2);
 					[...new Array(count)].forEach(() => {
 						particles.push(particle({
 							x: this.x,
 							y: this.y,
 							base: Math.PI,
-							direction: -Math.random() * Math.PI * 2,
-							length: Math.min(this.velocity.length * (Math.random() + 1), 40)
+							direction: this.velocity.direction + Math.PI * (Math.random() - 0.5),
+							length: Math.min(this.velocity.length * (Math.random() + 1), 32)
 						}));
 					});
 				}

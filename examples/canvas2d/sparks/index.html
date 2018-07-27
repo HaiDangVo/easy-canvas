@@ -10,10 +10,23 @@
 		canvas {
 			display: block;
 		}
+		div {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 30px;
+			text-align: center;
+			color: #ffffff;
+			font-size: 20px;
+			font-family: sans-serif;
+			opacity: 0.5;
+			pointer-events: none;
+		}
 	</style>
 </head>
 <body>
 	<canvas id="canvas"></canvas>
+	<div>Hold Ctrl to see slow motion effect, press Space to toggle exposure mode</div>
 	<script type="text/javascript" src="index.js"></script>
 </body>
 </html>
