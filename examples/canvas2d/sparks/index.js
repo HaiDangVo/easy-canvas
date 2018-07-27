@@ -7,7 +7,7 @@ var config = {
 	clearColor: '#000000',
 	gearColor: '#333333',
 	gearRadius: 150,
-	sparkColor: ['rgba(225, 242, 24, 0.9)', 'rgba(245, 186, 48, 0.6)', 'rgba(255, 112, 64, 0.1)', 'rgba(255, 96, 96, 0)'],
+	sparkColor: ['rgba(225, 242, 24, 0.9)', 'rgba(240, 222, 24, 0.35)', 'rgba(245, 186, 48, 0.2)', 'rgba(255, 112, 64, 0.1)', 'rgba(255, 96, 96, 0)'],
 	sparkWidth: 6,
 	maxParticles: 300,
 	perParticles: 4,
@@ -16,6 +16,7 @@ var config = {
 	minHz: 1000 / 5,
 	isSlowMotion: false,
 	isExposure: false,
+	debug: false,
 	speed: {
 		current: 0,
 		increment: 0.001,
@@ -38,12 +39,17 @@ window.onload = function () {
 		var temp = buffer.getContext('2d');
 		buffer.width = 128;
 		buffer.height = 128;
+		if (config.debug) {
+			buffer.style.cssText = 'position: absolute; left: 0; top: 0;';
+			document.body.appendChild(buffer);
+		}
 		var ct = buffer.width * 0.5;
 		var gradient = temp.createRadialGradient(ct, ct, 0, ct, ct, ct);
 		gradient.addColorStop(0.12, config.sparkColor[0]);
-		gradient.addColorStop(0.45, config.sparkColor[1]);
-		gradient.addColorStop(0.82, config.sparkColor[2]);
-		gradient.addColorStop(0.99, config.sparkColor[3]);
+		gradient.addColorStop(0.35, config.sparkColor[1]);
+		gradient.addColorStop(0.65, config.sparkColor[2]);
+		gradient.addColorStop(0.82, config.sparkColor[3]);
+		gradient.addColorStop(0.99, config.sparkColor[4]);
 		temp.fillStyle = gradient;
 		temp.arc(ct, ct, ct, 0, Math.PI * 2);
 		temp.fill();
@@ -81,9 +87,9 @@ window.onload = function () {
 			config.speed.current = Math.max(0, config.speed.current - config.speed.increment * delta);
 		}
 		if (config.isSlowMotion) {
-			config.hz = Math.min(config.minHz, config.hz + 1);
+			config.hz = Math.min(config.minHz, config.hz * 1.1);
 		} else {
-			config.hz = Math.max(config.maxHz, config.hz - 1);
+			config.hz = Math.max(config.maxHz, config.hz / 1.1);
 		}
 		config.speed.max = Math.PI * 0.12 * delta;
 		particles.forEach(p => p.update(delta));
@@ -191,7 +197,7 @@ window.onload = function () {
 			},
 			render(ctx, delta) {
 				let w = config.sparkWidth * this.thickness * this.velocity.length * delta;
-				let h = config.sparkWidth * this.thickness * this.lifespan * 1.25 / 80;
+				let h = config.sparkWidth * this.thickness * this.lifespan * 1.45 / 80;
 				w = Math.max(w, h);
 				ctx.translate(this.x, this.y);
 				ctx.rotate(this.rotation);
