@@ -89,14 +89,14 @@ const Rain = function(options = {}) {
     this.render = (ctx) => {
         ctx.translate(this.x, this.y);
         ctx.rotate(this.velocity.direction);
-        ctx.drawImage(this.sprite, this.velocity.length * this.delta + this.z * this.w, this.z * this.w * 0.5, this.velocity.length * 2 * this.delta + this.z * this.w, this.z * this.w);
+        ctx.drawImage(this.sprite, -this.velocity.length * 2 * this.delta + this.z * this.w, -this.z * this.w * 0.5, this.velocity.length * 2 * this.delta + this.z * this.w, this.z * this.w);
         ctx.rotate(-this.velocity.direction);
         ctx.translate(-this.x, -this.y);
     }
 
     this.debug = (ctx) => {
         ctx.strokeStyle = this.color;
-        ctx.lineWidth = this.z * 2.5 * (this.hz / this.baseHz);
+        ctx.lineWidth = this.z * 2.5;
         ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(
