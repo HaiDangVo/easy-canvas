@@ -1,20 +1,20 @@
 let canvas = document.getElementById('canvas') || document.createElement('canvas');
 let ctx = canvas.getContext('2d');
 let rains = [];
-let pointer = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, hold: false };
+let pointer = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, hold: true };
 let d = Math.sqrt(window.innerWidth * window.innerWidth + window.innerHeight * window.innerHeight);
 let buffer;
 let config = {
-    clearColor: '#000000',
+    clearColor: '#010212',
     debug: false,
     particles: {
-        total: 1500,
-        speed: window.innerHeight * 0.15,
+        total: 250,
+        speed: window.innerHeight * 0.01,
         width: 2,
         gravity: 6.9,
         radius: 0,
         minRadius: 20,
-        color: ['rgba(180, 165, 220, 0)', 'rgba(92, 120, 185, 0.4)', 'rgba(90, 100, 205, 0.1)', 'rgba(120, 140, 255, 0.8)']
+        color: ['rgba(180, 165, 220, 0)', 'rgba(142, 155, 185, 0.4)', 'rgba(190, 160, 205, 0.1)', 'rgba(220, 240, 255, 0.8)']
     }
 }
 
