@@ -10,7 +10,7 @@ let config = {
     particles: {
         total: 150,
         speed: window.innerHeight * 0.01,
-        width: 2,
+        width: 1.5,
         ease: 6.9,
         radius: 0,
         minRadius: 20,
@@ -38,7 +38,7 @@ const Rain = function(options = {}) {
         this.y = this.options.y || -Math.random() * canvas.height;
         this.z = Math.min(this.velocity.length / config.particles.speed, 1);
         this.hz = 1000 / 30;
-        this.minHz = 1000 / 1;
+        this.minHz = 1000 / 0.5;
         this.baseHz = 1000 / 30;
         this.distance = 1;
         this.now = Date.now();
@@ -53,6 +53,9 @@ const Rain = function(options = {}) {
                 index >= 0 && rains.splice(index, 1);
             }
         }
+        this.distance = Math.sqrt(Math.pow(this.x - pointer.x, 2) + Math.pow(this.y - pointer.y, 2)) * 2;
+        let fhz = this.distance > config.particles.radius ? 0.25 : 4;
+        this.hz = Math.max(Math.min(this.hz * fhz, this.hasLifespan ? this.minHz * 0.1 : this.minHz), this.baseHz);
         this.delta = (Date.now() - this.now) / this.hz;
         this.now += this.delta * this.hz;
         this.x += Math.cos(this.velocity.direction) * this.velocity.length * this.delta;
@@ -64,15 +67,12 @@ const Rain = function(options = {}) {
         this.w = this.width + Math.min((this.hz / this.baseHz) - 1, this.width * 2);
         this.velocity.length += this.ease * this.delta;
         this.velocity.direction += this.accelerate.change * this.delta;
-        this.distance = Math.sqrt(Math.pow(this.x - pointer.x, 2) + Math.pow(this.y - pointer.y, 2)) * 2;
-        let fhz = this.distance > config.particles.radius ? 0.25 : 4;
-        this.hz = Math.max(Math.min(this.hz * fhz, this.minHz), this.baseHz);
         if (this.velocity.direction > this.accelerate.max || this.velocity.direction < this.accelerate.min) {
             this.accelerate.change *= -1;
         }
         //
         if (this.y > canvas.height && !this.hasLifespan) {
-            [...Array(~~(Math.random() * 8) + 4)].forEach(() => rains.push(new Rain({
+            [...Array(~~(Math.random() * 4) + 4)].forEach(() => rains.push(new Rain({
                 x: this.x,
                 y: canvas.height,
                 hasLifespan: true,
@@ -87,7 +87,6 @@ const Rain = function(options = {}) {
     }
 
     this.render = (ctx) => {
-        //
         ctx.translate(this.x, this.y);
         ctx.rotate(this.velocity.direction);
         ctx.drawImage(this.sprite, this.velocity.length * this.delta + this.z * this.w, this.z * this.w * 0.5, this.velocity.length * 2 * this.delta + this.z * this.w, this.z * this.w);
@@ -165,7 +164,7 @@ const loop = () => {
 
 const update = () => {
     if (pointer.hold) {
-        config.particles.radius = Math.min(config.particles.radius + config.particles.minRadius, d * 0.25);
+        config.particles.radius = Math.min(config.particles.radius + config.particles.minRadius, d * 0.32);
     } else {
         config.particles.radius = Math.max(config.particles.radius - config.particles.minRadius, config.particles.minRadius);
     }
@@ -179,7 +178,7 @@ const render = () => {
     ctx.fillStyle = config.clearColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //
-    ctx.globalAlpha = 0.65;
+    ctx.globalAlpha = 0.6;
     ctx.globalCompositeOperation = 'overlay';
     ctx.translate(pointer.x, pointer.y);
     ctx.rotate(pointer.counter);
