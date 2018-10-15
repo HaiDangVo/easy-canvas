@@ -49,11 +49,12 @@ window.onload = function () {
 	function init() {
 		for (var i = 0; i < config.mask; i++) {
 			masks.push(new Mask({
-				x: imgColor.width * 0.4 + imgColor.width * 0.2 * Math.random(),
-				y: imgColor.height * 0.4 + imgColor.height * 0.2 * Math.random(),
+				x: imgColor.width * 0.3 + imgColor.width * 0.4 * Math.random(),
+				y: imgColor.height * 0.3 + imgColor.height * 0.4 * Math.random(),
 				w: imgColor.width,
 				h: imgColor.height,
 				alpha: Math.random(),
+				scale: Math.random(),
 				sprite: imgMask
 			}));
 		}
