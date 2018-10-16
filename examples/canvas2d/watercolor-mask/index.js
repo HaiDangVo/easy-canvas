@@ -2,7 +2,7 @@
 var canvas = document.getElementById('canvas') || document.createElement('canvas');
 var ctx = canvas.getContext('2d');
 var config = {
-	mask: 10,
+	mask: 4,
 	hz: 30
 }
 var delta = Date.now();
@@ -25,7 +25,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgGrey.src = '../../ocean-grey.jpg';
+		imgGrey.src = '../../train-grey.png';
 		//
 		imgColor = new Image();
 		imgColor.addEventListener('load', function () {
@@ -34,7 +34,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgColor.src = '../../ocean.jpg';
+		imgColor.src = '../../train-color.png';
 		//
 		imgMask = new Image();
 		imgMask.addEventListener('load', function () {
@@ -43,18 +43,18 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgMask.src = '../../alpha-noise.png';
+		imgMask.src = '../../alpha-noise0.png';
 	}
 
 	function init() {
 		for (var i = 0; i < config.mask; i++) {
 			masks.push(new Mask({
-				x: imgColor.width * 0.3 + imgColor.width * 0.4 * Math.random(),
-				y: imgColor.height * 0.3 + imgColor.height * 0.4 * Math.random(),
+				x: imgColor.width * Math.random(),
+				y: imgColor.height * Math.random(),
 				w: imgColor.width,
 				h: imgColor.height,
-				alpha: Math.random(),
-				scale: Math.random(),
+				alpha: Math.random() * 0.5 + 0.5,
+				scale: Math.random() * 0.5 + 0.5,
 				sprite: imgMask
 			}));
 		}
@@ -86,26 +86,32 @@ window.onload = function () {
 
 	function Mask(options) {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
-		this.rchange = options.rchange || Math.random() * 0.002 + 0.002;
-		this.rchange = Math.random() < 0.5 ? -this.rchange : this.rchange;
+		this.maxrotation = this.rotation + Math.random() * 0.02 - 0.01;
 		this.scale = options.scale || 0;
 		this.maxscale = options.maxscale || 5;
-		this.schange = options.schange || Math.random() * 0.005 + 0.01;
 		this.alpha = options.alpha || 0;
 		this.maxalpha = options.maxalpha || 1;
-		this.achange = options.achange || Math.random() * 0.05 + 0.05;
 		this.x = options.x || 0;
 		this.y = options.y || 0;
 		this.w = options.w || 256;
 		this.h = options.h || 256;
+		this.delta = options.delta || 0;
+		this.d = options.d || 0.02;
+		this.base = { rotation: this.rotation, scale: this.scale, alpha: this.alpha };
+		this.action = options.action || '+';
 		this.sprite = options.sprite || new Image();
 
 		this.update = function (delta) {
-			this.rotation += this.rchange * delta;
-			this.scale += this.schange * delta;
-			this.scale = Math.min(this.scale, this.maxscale);
-			this.alpha += this.achange * delta;
-			this.alpha = Math.min(this.alpha, this.maxalpha);
+			if (this.delta * 0.15 > 1) {
+				this.action = '-';
+			}
+			if (this.delta < 0) {
+				this.action = '+'
+			}
+			this.delta = this.action == '+' ? (this.delta + this.d * delta) : this.action == '-' ? (this.delta - this.d * delta) : this.delta;
+			this.rotation = this.base.rotation + ((this.maxrotation - this.base.rotation) * this.delta);
+			this.scale = this.maxscale * this.delta * 0.15;
+			this.alpha = this.maxalpha * this.delta * 0.65;
 		}
 
 		this.render = function (ctx) {
