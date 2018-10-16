@@ -50,7 +50,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgMask.src = '../../alpha-noise4.png';
+		imgMask.src = '../../alpha-noise5.png';
 	}
 
 	function init() {
@@ -111,7 +111,7 @@ window.onload = function () {
 
 	function Mask(options) {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
-		this.maxrotation = this.rotation + Math.random() * 0.8 - 0.4;
+		this.maxrotation = this.rotation + Math.random() * 0.4 - 0.2;
 		this.scale = options.scale || 0;
 		this.maxscale = options.maxscale || 3;
 		this.alpha = options.alpha || 0;
