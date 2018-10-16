@@ -2,18 +2,19 @@
 var canvas = document.getElementById('canvas') || document.createElement('canvas');
 var ctx = canvas.getContext('2d');
 var config = {
-	mask: 6,
+	mask: 20,
 	hz: 30
 }
 var delta = Date.now();
 var temp = document.createElement('canvas');
 var buffer = temp.getContext('2d');
 var imgGrey, imgColor, imgMask;
-var masks = [];
+var masks;
 //
 window.onload = function () {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+	masks = [];
 	preload();
 
 	function preload() {
@@ -26,7 +27,9 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgGrey.src = '../../train-grey.png';
+		var rand = Math.round(Math.random() * 2);
+		var imgGreySrc = ['gate-grey.png', 'house-grey.png', 'back-grey.png'];
+		imgGrey.src = '../../' + imgGreySrc[rand];
 		//
 		imgColor = new Image();
 		imgColor.addEventListener('load', function () {
@@ -37,7 +40,8 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgColor.src = '../../train-color.png';
+		var imgColorSrc = ['gate-color.png', 'house-color.png', 'back-color.png'];
+		imgColor.src = '../../' + imgColorSrc[rand];
 		//
 		imgMask = new Image();
 		imgMask.addEventListener('load', function () {
@@ -63,8 +67,8 @@ window.onload = function () {
 		}
 		canvas.addEventListener('mousedown', function (e) {
 			masks.forEach(m => {
-				m.x = e.clientX + (Math.random() * 100 - 50);
-				m.y = e.clientY + (Math.random() * 100 - 50);
+				m.x = e.clientX + (Math.random() * 60 - 30);
+				m.y = e.clientY + (Math.random() * 60 - 30);
 				m.action = '+'
 			});
 		});
@@ -107,7 +111,7 @@ window.onload = function () {
 
 	function Mask(options) {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
-		this.maxrotation = this.rotation + Math.random() * 0.04 - 0.02;
+		this.maxrotation = this.rotation + Math.random() * 0.8 - 0.4;
 		this.scale = options.scale || 0;
 		this.maxscale = options.maxscale || 3;
 		this.alpha = options.alpha || 0;
@@ -117,7 +121,7 @@ window.onload = function () {
 		this.w = options.w || 256;
 		this.h = options.h || 256;
 		this.delta = options.delta || 0;
-		this.d = options.d || 0.025;
+		this.d = options.d || 0.04;
 		this.base = { rotation: this.rotation, scale: this.scale, alpha: this.alpha };
 		this.action = options.action || '';
 		this.sprite = options.sprite || new Image();
