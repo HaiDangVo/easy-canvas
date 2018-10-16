@@ -2,11 +2,12 @@
 var canvas = document.getElementById('canvas') || document.createElement('canvas');
 var ctx = canvas.getContext('2d');
 var config = {
-	mask: 2,
+	mask: 6,
 	hz: 30
 }
 var delta = Date.now();
-var buffer = document.createElement('canvas');
+var temp = document.createElement('canvas');
+var buffer = temp.getContext('2d');
 var imgGrey, imgColor, imgMask;
 var masks = [];
 //
@@ -25,7 +26,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgGrey.src = '../../back-grey.png';
+		imgGrey.src = '../../train-grey.png';
 		//
 		imgColor = new Image();
 		imgColor.addEventListener('load', function () {
@@ -36,7 +37,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgColor.src = '../../back-color.png';
+		imgColor.src = '../../train-color.png';
 		//
 		imgMask = new Image();
 		imgMask.addEventListener('load', function () {
@@ -55,8 +56,8 @@ window.onload = function () {
 				y: imgColor.height * Math.random(),
 				w: imgColor.width,
 				h: imgColor.width,
-				alpha: 0.5,
-				scale: 0.05,
+				alpha: Math.random() * 0.5,
+				scale: 0.001,
 				sprite: imgMask
 			}));
 		}
@@ -73,6 +74,8 @@ window.onload = function () {
 				m.action = '-';
 			});
 		});
+		temp.width = canvas.width;
+		temp.height = canvas.height;
 		//
 		loop();
 	}
@@ -95,7 +98,9 @@ window.onload = function () {
 		ctx.globalCompositeOperation = 'source-over';
 		ctx.drawImage(imgColor, 0, 0);
 		ctx.globalCompositeOperation = 'destination-in';
-		masks.forEach(m => m.render(ctx));
+		buffer.clearRect(0, 0, temp.width, temp.height);
+		masks.forEach(m => m.render(buffer));
+		ctx.drawImage(temp, 0, 0);
 		ctx.globalCompositeOperation = 'destination-atop';
 		ctx.drawImage(imgGrey, 0, 0);
 	}
@@ -119,14 +124,18 @@ window.onload = function () {
 
 		this.update = function (delta) {
 			if (!this.action) return;
-			if (this.action == '-' && this.delta < 0) return;
+			if (this.action == '-' && this.delta < 0) {
+				this.action = '';
+				return;
+			}
 			this.delta = this.action == '+' ? (this.delta + this.d * delta) : this.action == '-' ? (this.delta - this.d * delta) : this.delta;
 			this.rotation = this.base.rotation + ((this.maxrotation - this.base.rotation) * this.delta);
-			this.scale = this.maxscale * this.delta * 0.15;
-			this.alpha = this.base.alpha + this.maxalpha * this.delta * 1.5;
+			this.scale = this.maxscale * this.delta * 0.25;
+			this.alpha = this.base.alpha + this.maxalpha * this.delta * 2.5;
 		}
 
 		this.render = function (ctx) {
+			if (!this.action) return;
 			ctx.globalAlpha = this.alpha;
 			ctx.translate(this.x, this.y);
 			ctx.rotate(this.rotation);
