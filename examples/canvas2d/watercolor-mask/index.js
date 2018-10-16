@@ -25,16 +25,18 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgGrey.src = '../../train-grey.png';
+		imgGrey.src = '../../back-grey.png';
 		//
 		imgColor = new Image();
 		imgColor.addEventListener('load', function () {
 			loaded++;
+			canvas.width = imgColor.width;
+			canvas.height = imgColor.height;
 			if (loaded >= total) {
 				init();
 			}
 		});
-		imgColor.src = '../../train-color.png';
+		imgColor.src = '../../back-color.png';
 		//
 		imgMask = new Image();
 		imgMask.addEventListener('load', function () {
@@ -43,7 +45,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgMask.src = '../../alpha-noise0.png';
+		imgMask.src = '../../alpha-noise3.png';
 	}
 
 	function init() {
@@ -52,7 +54,7 @@ window.onload = function () {
 				x: imgColor.width * Math.random(),
 				y: imgColor.height * Math.random(),
 				w: imgColor.width,
-				h: imgColor.height,
+				h: imgColor.width,
 				alpha: Math.random() * 0.5 + 0.5,
 				scale: Math.random() * 0.5 + 0.5,
 				sprite: imgMask
@@ -88,7 +90,7 @@ window.onload = function () {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
 		this.maxrotation = this.rotation + Math.random() * 0.02 - 0.01;
 		this.scale = options.scale || 0;
-		this.maxscale = options.maxscale || 5;
+		this.maxscale = options.maxscale || 8;
 		this.alpha = options.alpha || 0;
 		this.maxalpha = options.maxalpha || 1;
 		this.x = options.x || 0;
