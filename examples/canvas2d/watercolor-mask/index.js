@@ -56,19 +56,22 @@ window.onload = function () {
 				w: imgColor.width,
 				h: imgColor.width,
 				alpha: 0.5,
-				scale: 0.01,
+				scale: 0.05,
 				sprite: imgMask
 			}));
 		}
-		canvas.addEventListener('mousedown', function(e) {
+		canvas.addEventListener('mousedown', function (e) {
 			masks.forEach(m => {
 				m.x = e.clientX + (Math.random() * 100 - 50);
 				m.y = e.clientY + (Math.random() * 100 - 50);
 				m.action = '+'
 			});
 		});
-		canvas.addEventListener('mouseup', function() {
-			masks.forEach(m => m.action = '-')
+		canvas.addEventListener('mouseup', function () {
+			masks.forEach(m => {
+				m.delta = Math.max(m.delta, 1);
+				m.action = '-';
+			});
 		});
 		//
 		loop();
@@ -88,6 +91,7 @@ window.onload = function () {
 	}
 
 	function render(delta) {
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.globalCompositeOperation = 'source-over';
 		ctx.drawImage(imgColor, 0, 0);
 		ctx.globalCompositeOperation = 'destination-in';
@@ -100,7 +104,7 @@ window.onload = function () {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
 		this.maxrotation = this.rotation + Math.random() * 0.04 - 0.02;
 		this.scale = options.scale || 0;
-		this.maxscale = options.maxscale || 5;
+		this.maxscale = options.maxscale || 3;
 		this.alpha = options.alpha || 0;
 		this.maxalpha = options.maxalpha || 1;
 		this.x = options.x || 0;
@@ -108,7 +112,7 @@ window.onload = function () {
 		this.w = options.w || 256;
 		this.h = options.h || 256;
 		this.delta = options.delta || 0;
-		this.d = options.d || 0.02;
+		this.d = options.d || 0.025;
 		this.base = { rotation: this.rotation, scale: this.scale, alpha: this.alpha };
 		this.action = options.action || '';
 		this.sprite = options.sprite || new Image();
