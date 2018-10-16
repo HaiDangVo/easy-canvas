@@ -2,7 +2,7 @@
 var canvas = document.getElementById('canvas') || document.createElement('canvas');
 var ctx = canvas.getContext('2d');
 var config = {
-	mask: 4,
+	mask: 2,
 	hz: 30
 }
 var delta = Date.now();
@@ -45,7 +45,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		imgMask.src = '../../alpha-noise3.png';
+		imgMask.src = '../../alpha-noise4.png';
 	}
 
 	function init() {
@@ -55,11 +55,21 @@ window.onload = function () {
 				y: imgColor.height * Math.random(),
 				w: imgColor.width,
 				h: imgColor.width,
-				alpha: Math.random() * 0.5 + 0.5,
-				scale: Math.random() * 0.5 + 0.5,
+				alpha: 0.5,
+				scale: 0.01,
 				sprite: imgMask
 			}));
 		}
+		canvas.addEventListener('mousedown', function(e) {
+			masks.forEach(m => {
+				m.x = e.clientX + (Math.random() * 100 - 50);
+				m.y = e.clientY + (Math.random() * 100 - 50);
+				m.action = '+'
+			});
+		});
+		canvas.addEventListener('mouseup', function() {
+			masks.forEach(m => m.action = '-')
+		});
 		//
 		loop();
 	}
@@ -88,9 +98,9 @@ window.onload = function () {
 
 	function Mask(options) {
 		this.rotation = options.rotation || Math.random() * 2 * Math.PI;
-		this.maxrotation = this.rotation + Math.random() * 0.02 - 0.01;
+		this.maxrotation = this.rotation + Math.random() * 0.04 - 0.02;
 		this.scale = options.scale || 0;
-		this.maxscale = options.maxscale || 8;
+		this.maxscale = options.maxscale || 5;
 		this.alpha = options.alpha || 0;
 		this.maxalpha = options.maxalpha || 1;
 		this.x = options.x || 0;
@@ -100,22 +110,19 @@ window.onload = function () {
 		this.delta = options.delta || 0;
 		this.d = options.d || 0.02;
 		this.base = { rotation: this.rotation, scale: this.scale, alpha: this.alpha };
-		this.action = options.action || '+';
+		this.action = options.action || '';
 		this.sprite = options.sprite || new Image();
 
 		this.update = function (delta) {
-			if (this.delta * 0.15 > 1) {
-				this.action = '-';
-			}
-			if (this.delta < 0) {
-				this.action = '+'
-			}
+			if (!this.action) return;
+			if (this.action == '-' && this.delta < 0) return;
 			this.delta = this.action == '+' ? (this.delta + this.d * delta) : this.action == '-' ? (this.delta - this.d * delta) : this.delta;
 			this.rotation = this.base.rotation + ((this.maxrotation - this.base.rotation) * this.delta);
 			this.scale = this.maxscale * this.delta * 0.15;
-			this.alpha = this.maxalpha * this.delta * 0.65;
+			this.alpha = this.base.alpha + this.maxalpha * this.delta * 1.5;
 		}
 
+		var counter = 0
 		this.render = function (ctx) {
 			ctx.globalAlpha = this.alpha;
 			ctx.translate(this.x, this.y);
