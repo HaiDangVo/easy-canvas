@@ -122,7 +122,6 @@ window.onload = function () {
 			this.alpha = this.base.alpha + this.maxalpha * this.delta * 1.5;
 		}
 
-		var counter = 0
 		this.render = function (ctx) {
 			ctx.globalAlpha = this.alpha;
 			ctx.translate(this.x, this.y);
