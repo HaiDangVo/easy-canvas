@@ -27,8 +27,8 @@ window.onload = function () {
 				init();
 			}
 		});
-		var rand = Math.round(Math.random() * 2);
-		var imgGreySrc = ['gate-grey.png', 'house-grey.png', 'back-grey.png'];
+		var rand = Math.round(Math.random() * 3);
+		var imgGreySrc = ['gate-grey.png', 'house-grey.png', 'back-grey.png', 'train-grey.png'];
 		imgGrey.src = '../../' + imgGreySrc[rand];
 		//
 		imgColor = new Image();
@@ -40,7 +40,7 @@ window.onload = function () {
 				init();
 			}
 		});
-		var imgColorSrc = ['gate-color.png', 'house-color.png', 'back-color.png'];
+		var imgColorSrc = ['gate-color.png', 'house-color.png', 'back-color.png', 'train-color.png'];
 		imgColor.src = '../../' + imgColorSrc[rand];
 		//
 		imgMask = new Image();
