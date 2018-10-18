@@ -67,8 +67,8 @@ window.onload = function () {
 		}
 		canvas.addEventListener('mousedown', function (e) {
 			masks.forEach(m => {
-				m.x = e.clientX + (Math.random() * 60 - 30);
-				m.y = e.clientY + (Math.random() * 60 - 30);
+				m.x = e.clientX + (Math.random() * 100 - 50);
+				m.y = e.clientY + (Math.random() * 100 - 50);
 				m.action = '+'
 			});
 		});
@@ -80,6 +80,7 @@ window.onload = function () {
 		});
 		temp.width = canvas.width;
 		temp.height = canvas.height;
+		buffer.globalCompositeOperation = 'multiply';
 		//
 		loop();
 	}
@@ -99,6 +100,7 @@ window.onload = function () {
 
 	function render(delta) {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		buffer.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.globalCompositeOperation = 'source-over';
 		ctx.drawImage(imgColor, 0, 0);
 		ctx.globalCompositeOperation = 'destination-in';
@@ -135,7 +137,7 @@ window.onload = function () {
 			this.delta = this.action == '+' ? (this.delta + this.d * delta) : this.action == '-' ? (this.delta - this.d * delta) : this.delta;
 			this.rotation = this.base.rotation + ((this.maxrotation - this.base.rotation) * this.delta);
 			this.scale = this.maxscale * this.delta * 0.25;
-			this.alpha = this.base.alpha + this.maxalpha * this.delta * 2.5;
+			this.alpha = this.base.alpha + this.maxalpha * this.delta * 0.25;
 		}
 
 		this.render = function (ctx) {
